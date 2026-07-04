@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-paper text-ink antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  .dark body {
+    @apply bg-slate-900 text-paper;
+  }
+
+  /* Visible focus states everywhere (accessibility). */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-paper;
+  }
+  .dark :focus-visible {
+    @apply ring-offset-slate-900;
+  }
+}
+
+@layer components {
+  /* Primary touch targets — never below 48px. */
+  .btn {
+    @apply inline-flex min-h-touch items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-soft active:bg-accent-ink;
+  }
+  .btn-secondary {
+    @apply btn border border-line bg-surface text-ink hover:bg-paper;
+  }
+  .dark .btn-secondary {
+    @apply border-slate-600 bg-slate-800 text-paper hover:bg-slate-700;
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-black/5;
+  }
+  .dark .btn-ghost {
+    @apply text-paper hover:bg-white/10;
+  }
+  .btn-danger {
+    @apply btn bg-[#a23c46] text-white hover:opacity-90;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+  .dark .card {
+    @apply border-slate-600 bg-slate-800;
+  }
+
+  .chip {
+    @apply inline-flex min-h-[40px] items-center gap-1.5 rounded-full border px-3 text-sm font-medium;
+  }
+
+  .input {
+    @apply min-h-touch w-full rounded-xl border border-line bg-surface px-4 text-base text-ink placeholder:text-ink/40;
+  }
+  .dark .input {
+    @apply border-slate-600 bg-slate-800 text-paper placeholder:text-paper/40;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-semibold text-ink/70;
+  }
+  .dark .label {
+    @apply text-paper/70;
+  }
+}
+
+/* Respect reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Markdown (reference bodies) — modest, readable defaults. */
+.prose-house h1,
+.prose-house h2,
+.prose-house h3 {
+  @apply mb-2 mt-4 font-bold;
+}
+.prose-house h2 {
+  @apply text-xl;
+}
+.prose-house h3 {
+  @apply text-lg;
+}
+.prose-house p {
+  @apply my-2 leading-relaxed;
+}
+.prose-house ul {
+  @apply my-2 list-disc pl-5;
+}
+.prose-house ol {
+  @apply my-2 list-decimal pl-5;
+}
+.prose-house li {
+  @apply my-1;
+}
+.prose-house a {
+  @apply text-accent underline;
+}
+.prose-house code {
+  @apply rounded bg-black/10 px-1 py-0.5 text-sm;
+}
+.dark .prose-house code {
+  @apply bg-white/10;
+}
