@@ -1,5 +1,7 @@
 # House Manual
 
+> This repo also contains **[Pip's Super Quest](game/README.md)**, a standalone Year 1 phonics & maths platform game in `game/`.
+
 An **offline-first Progressive Web App** — a personal, step-by-step DIY manual for one specific
 house. Content is created and improved through a **paste round-trip with Claude**: the app itself
 makes **zero network requests** at runtime, and everything (guides, reference notes, photos) lives

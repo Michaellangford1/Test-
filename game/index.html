@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1d1147">
+  <meta name="description" content="A platform adventure for Year 1: practise phonics and maths by bumping question blocks.">
+  <title>Pip's Super Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game" aria-label="Game screen"></canvas>
+
+    <!-- In-game HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-left">
+        <div id="hud-hearts" class="hud-pill" aria-label="Hearts"></div>
+        <div class="hud-pill"><span class="coin-ico"></span><span id="hud-coins">0</span></div>
+        <div class="hud-pill" title="Questions answered correctly"><span class="q-ico">?</span><span id="hud-q">0/0</span></div>
+      </div>
+      <div id="hud-level" class="hud-pill hud-level"></div>
+      <div class="hud-right">
+        <button class="icon-btn btn-music" aria-label="Music on/off">♪</button>
+        <button class="icon-btn btn-sound" aria-label="Sound on/off">🔊</button>
+        <button id="btn-pause" class="icon-btn" aria-label="Pause">❚❚</button>
+      </div>
+    </div>
+
+    <!-- Touch controls (tablets / phones) -->
+    <div id="touch" class="hidden">
+      <div class="t-pad">
+        <button id="t-left" class="t-btn" aria-label="Left">◀</button>
+        <button id="t-right" class="t-btn" aria-label="Right">▶</button>
+      </div>
+      <button id="t-jump" class="t-btn t-jump" aria-label="Jump">⤒</button>
+    </div>
+
+    <!-- Title -->
+    <section id="screen-title" class="screen">
+      <div class="title-wrap">
+        <div class="logo">
+          <span class="logo-small">Pip's</span>
+          <span class="logo-big">Super Quest</span>
+          <span class="logo-sub">A phonics &amp; maths platform adventure</span>
+        </div>
+        <div class="panel">
+          <p class="panel-label">What shall we practise?</p>
+          <div class="mode-row">
+            <button class="mode-btn" data-mode="phonics"><span class="m-ico">🔤</span>Phonics</button>
+            <button class="mode-btn" data-mode="maths"><span class="m-ico">🔢</span>Maths</button>
+            <button class="mode-btn" data-mode="both"><span class="m-ico">⭐</span>Both</button>
+          </div>
+          <button id="btn-play" class="big-btn go">Play!</button>
+          <div class="title-foot">
+            <button id="btn-grownups" class="small-btn">For grown-ups</button>
+            <button class="small-btn btn-sound" aria-label="Sound on/off">🔊 Sound</button>
+            <button class="small-btn btn-music" aria-label="Music on/off">♪ Music</button>
+          </div>
+        </div>
+        <p class="controls-hint"><kbd>←</kbd><kbd>→</kbd> move &nbsp; <kbd>Space</kbd>/<kbd>↑</kbd> jump &nbsp; <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> answer &nbsp; <kbd>P</kbd> pause</p>
+      </div>
+    </section>
+
+    <!-- World map -->
+    <section id="screen-map" class="screen hidden">
+      <div class="map-wrap">
+        <header class="map-head">
+          <button id="btn-map-back" class="small-btn">◀ Back</button>
+          <h2>Choose a level</h2>
+          <span class="map-total"><span class="star-ico"></span><span id="map-total">0</span></span>
+        </header>
+        <div id="map-worlds" class="map-worlds"></div>
+      </div>
+    </section>
+
+    <!-- Question pop-up -->
+    <section id="screen-quiz" class="screen modal hidden" role="dialog" aria-modal="true" aria-labelledby="quiz-prompt">
+      <div id="quiz-card" class="quiz-card">
+        <div class="quiz-head">
+          <span id="quiz-topic" class="quiz-topic"></span>
+          <span id="quiz-skill" class="quiz-skill"></span>
+        </div>
+        <h2 id="quiz-prompt" class="quiz-prompt"></h2>
+        <div id="quiz-visual" class="quiz-visual"></div>
+        <div id="quiz-options" class="quiz-options"></div>
+        <p id="quiz-feedback" class="quiz-feedback" aria-live="polite"></p>
+        <button id="quiz-continue" class="big-btn go hidden">Carry on ▶</button>
+      </div>
+    </section>
+
+    <!-- Pause -->
+    <section id="screen-pause" class="screen modal hidden">
+      <div class="panel center">
+        <h2>Paused</h2>
+        <button id="btn-resume" class="big-btn go">Keep playing</button>
+        <button id="btn-restart" class="big-btn alt">Restart level</button>
+        <button id="btn-quit" class="big-btn alt">Level map</button>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="screen-results" class="screen modal hidden">
+      <div class="panel center results">
+        <h2 id="res-title">Level complete!</h2>
+        <div id="res-stars" class="res-stars"></div>
+        <p id="res-msg" class="res-msg"></p>
+        <div class="res-stats">
+          <div><span class="coin-ico"></span><b id="res-coins">0</b><small>coins</small></div>
+          <div><span class="q-ico">✓</span><b id="res-first">0/0</b><small>right first time</small></div>
+          <div><span class="q-ico">?</span><b id="res-blocks">0/0</b><small>blocks found</small></div>
+        </div>
+        <ul id="res-skills" class="res-skills"></ul>
+        <p id="res-final" class="res-final hidden">🏆 You finished every world! Replay levels to earn all the stars.</p>
+        <div class="res-buttons">
+          <button id="btn-next" class="big-btn go">Next level ▶</button>
+          <button id="btn-replay" class="big-btn alt">Play again</button>
+          <button id="btn-res-map" class="big-btn alt">Level map</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grown-ups -->
+    <section id="screen-grownups" class="screen modal hidden">
+      <div class="panel grownups">
+        <h2>For parents &amp; teachers</h2>
+        <p>Pip's Super Quest practises the <b>Year 1</b> curriculum for England. Each world gets harder:</p>
+        <ul class="gu-list">
+          <li><b>Meadow:</b> Phase 3 digraphs (ch, sh, th, ng, ai, ee, oa, oo), counting to 10, bonds to 10, adding within 10, 2D shapes.</li>
+          <li><b>Desert:</b> Phase 3 trigraphs and vowel digraphs (igh, ar, or, ur, ow, oi, ear, air, er), counting to 20, subtracting, counting in 2s, 5s and 10s.</li>
+          <li><b>Snow:</b> Phase 5 alternative graphemes (ay, ou, ie, ea, oy, ir, aw, ph, ew, ue), bonds to 20, tens and ones, 3D shapes.</li>
+          <li><b>Crystal:</b> split digraphs (a‑e, i‑e, o‑e, u‑e), missing number problems, numbers to 100.</li>
+        </ul>
+        <p>Every level includes <b>real or alien words</b> in the style of the Phonics Screening Check. Children get a second try, then the answer is shown and explained. Scores below count answers that were <b>right first time</b>.</p>
+        <table class="gu-table"><tbody id="gu-table"></tbody></table>
+        <div class="res-buttons">
+          <button id="btn-gu-back" class="big-btn go">Back</button>
+          <button id="btn-gu-reset" class="big-btn alt">Reset progress</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="toast" role="status"></div>
+    <div id="rotate-hint">Turn your device sideways to play ↻</div>
+  </div>
+
+  <script src="js/util.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/game.js"></script>
+  <script>PQ.Game.boot();</script>
+</body>
+</html>
