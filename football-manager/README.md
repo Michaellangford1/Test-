@@ -35,6 +35,12 @@ player database**. It's an installable, offline-capable web app (PWA), so it pla
 
 ## Play it on your phone
 
+**Hosted:** https://michaellangford1.github.io/Test-/ — deployed automatically by
+`.github/workflows/deploy-football-manager.yml` whenever `football-manager/` changes
+(GitHub Pages must be set to serve the `gh-pages` branch).
+
+To host it yourself:
+
 ```bash
 npm install
 npm run build        # outputs dist/

@@ -1,0 +1,55 @@
+# Builds Gaffer '05 (football-manager/) and publishes it to the gh-pages branch,
+# which GitHub Pages serves at https://<owner>.github.io/<repo>/
+name: Deploy Gaffer '05 to GitHub Pages
+
+on:
+  push:
+    branches:
+      - claude/football-manager-mobile-app-7s12gt
+      - claude/spec-implementation-xtwopj
+    paths:
+      - 'football-manager/**'
+      - '.github/workflows/deploy-football-manager.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: football-manager
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: football-manager/package-lock.json
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Build
+        run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+
+      - name: Publish to gh-pages
+        working-directory: football-manager/dist
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          touch .nojekyll
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Deploy Gaffer '05 from ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
