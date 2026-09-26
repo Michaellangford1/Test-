@@ -1,3 +1,5 @@
+> **Also in this repo:** [`football-manager/`](football-manager/) — *Gaffer '05*, a mobile football management game in the spirit of FM2005 with a 2025/26 player database.
+
 # House Manual
 
 An **offline-first Progressive Web App** — a personal, step-by-step DIY manual for one specific

@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --club1: #40587c;
+  --club2: #ffffff;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-950 text-ink-100 font-sans antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  font-size: 14px;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+input,
+select,
+textarea {
+  @apply bg-ink-900 border border-ink-600 rounded px-2 py-1.5 text-ink-100 outline-none focus:border-ink-300;
+  font-size: 16px; /* prevents iOS zoom on focus */
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* FM2005-style panel headers */
+.panel-head {
+  background: linear-gradient(180deg, #2e4260 0%, #22324a 100%);
+  @apply text-ink-100 text-xs font-bold uppercase tracking-wide px-3 py-1.5 border-b border-ink-950;
+}
+
+.panel {
+  @apply bg-ink-850 border border-ink-700 rounded-md overflow-hidden;
+}
+
+.row {
+  @apply flex items-center gap-2 px-3 py-2 border-b border-ink-800 last:border-b-0;
+}
+
+.row-tap {
+  @apply row active:bg-ink-700 cursor-pointer;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-md px-3 py-2 font-bold text-sm transition-colors disabled:opacity-40 select-none;
+}
+.btn-primary {
+  @apply btn bg-pitch-600 active:bg-pitch-700 text-white border border-pitch-500;
+}
+.btn-secondary {
+  @apply btn bg-ink-700 active:bg-ink-600 text-ink-100 border border-ink-600;
+}
+.btn-danger {
+  @apply btn bg-loss/80 active:bg-loss text-white border border-loss;
+}
+.btn-ghost {
+  @apply btn text-ink-200 active:bg-ink-700;
+}
+
+.chip {
+  @apply inline-flex items-center rounded px-1.5 text-[11px] font-bold leading-5;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #40587c;
+  border-radius: 2px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-slide-up {
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes goalFlash {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  30% {
+    background-color: rgba(242, 193, 78, 0.35);
+  }
+}
+.goal-flash {
+  animation: goalFlash 1.2s ease-out;
+}
